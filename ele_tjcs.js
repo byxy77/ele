@@ -1,4 +1,5 @@
 /**
+ * cron "27 11,17 * * *" ele_tjcs.js
  * 变量：elmck: 必填，账号cookie
  */
 

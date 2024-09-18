@@ -1,3 +1,7 @@
+/**
+ * cron "47 10,16 * * *" ele_mst.js
+ */
+const $ = new Env('饿了么美食摊')
 const {
     getToken,
     sign,

@@ -1,8 +1,9 @@
 /**
  * 变量：elmck: 必填，账号cookie
- * cron: 7 0,6,12,18,22 * * *
+ * cron: 7 8,12 * * *
  * 修复连连看
  */
+const $ = new Env('饿了么乐园币')
 const {
     "getToken": getToken,
     "checkCk": checkCk,

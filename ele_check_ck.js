@@ -1,3 +1,7 @@
+/**
+ * cron "7 9,15 * * *" ele_check_ck.js
+ */
+const $ = new Env('饿了么CK')
 const {
     getEnvsByName,
     DisableCk,
@@ -132,13 +136,14 @@ async function _0x179175(data, context, options) {
                         await EnableCk(houda);
                         console.log("第", mackala + 1, "账号正常😁\n");
                     } else {
-                        const lakeyah = await DisableCk(houda);
-                        if (lakeyah.code === 200) {
-                            console.log("第", mackala + 1, "账号失效！已🈲用");
-                        } else {
-                            console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
-                        }
-                        await invalidCookieNotify(athel, pragati[mackala].remarks);
+                        // const lakeyah = await DisableCk(houda);
+                        // if (lakeyah.code === 200) {
+                        //     console.log("第", mackala + 1, "账号失效！已🈲用");
+                        // } else {
+                        //     console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
+                        // }
+                        // await invalidCookieNotify(athel, pragati[mackala].remarks);
+                        console.log("第", mackala + 1, "账号不正常，等待下次检测😁\n");
                     }
                 } else {
                     let amirr = await getUserInfo(athel);
@@ -148,12 +153,13 @@ async function _0x179175(data, context, options) {
                             await EnableCk(houda);
                             console.log("第", mackala + 1, "账号正常😁\n");
                         } else {
-                            const jericca = await DisableCk(houda);
-                            if (jericca.code === 200) {
-                                console.log("第", mackala + 1, "账号失效！已🈲用");
-                            } else {
-                                console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
-                            }
+                            // const jericca = await DisableCk(houda);
+                            // if (jericca.code === 200) {
+                            //     console.log("第", mackala + 1, "账号失效！已🈲用");
+                            // } else {
+                            //     console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
+                            // }
+                            console.log("第", mackala + 1, "账号不正常，等待下次检测😁\n");
                         }
                         await invalidCookieNotify(athel, pragati[mackala].remarks);
                     } else {

@@ -1,5 +1,6 @@
 /**
  * 变量：elmck: 必填，账号cookie
+ * cron "7 10,16 * * *" ele_femf.js
  */
 
 const $ = new Env('饿了么福尔魔方');

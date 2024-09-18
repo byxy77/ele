@@ -1,3 +1,7 @@
+/**
+ * cron "27 10,16 * * *" ele_hctmm.js
+ */
+const $ = new Env('合成甜蜜蜜')
 const {
   sign,
   getToken,

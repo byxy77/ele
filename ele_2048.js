@@ -1,3 +1,7 @@
+/**
+ * cron "27 9,15 * * *" ele_2048.js
+ */
+const $ = new Env('饿了么2048')
 const {
   getToken,
   sign,

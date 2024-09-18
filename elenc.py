@@ -36,7 +36,8 @@ class LYB:
         self.name1 = self.uid
 
     def xsign(self, api, data, wua, v):
-        url = "http://bj.frp.one:17151/getXSign"
+        #url = "http://bj.frp.one:17151/getXSign"
+        url = "http://8.138.111.200:49888/api/getXSign"
         body = {
             "data": data,
             "api": api,
@@ -492,8 +493,8 @@ class LYB:
                     total_progress += progress
                     ygz = rede['data']['data']['roleInfoDTO']['rolePropertyInfoDtoList'][0]['totalPropertyCnt']
                     print(f"[{self.name}] ✅第{total_watering}次浇水成功,获得进度--[{progress}]")
-                    if float(progress) < 0.02:
-                        print(f"[{self.name}] ✅进度小于0.04，停止浇水")
+                    if float(progress) < 0.01:
+                        print(f"[{self.name}] ✅进度小于0.01，停止浇水")
                         break
                     if 'processRewardShow' in rede['data']['data']['roleInfoDTO']['processRewardDTO'] and 'openFlag' in \
                             rede['data']['data']['roleInfoDTO']['processRewardDTO']['processRewardShow']:
@@ -744,12 +745,13 @@ if __name__ == '__main__':
                         time.sleep(2)
                         continue
                     elif a is False:
-                        data[f"{usid}"] = 3
-                        with open(filename, 'w') as file:
-                            json.dump(data, file, indent=4)
-                        print("2s后进行下一个账号")
-                        time.sleep(2)
-                        continue
+                        if dzl_num != i + 1:
+                            data[f"{usid}"] = 3
+                            with open(filename, 'w') as file:
+                                json.dump(data, file, indent=4)
+                            print("2s后进行下一个账号")
+                            time.sleep(2)
+                            continue
                     else:
                         print("2s后进行下一个账号")
                         time.sleep(2)

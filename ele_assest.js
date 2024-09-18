@@ -1,3 +1,7 @@
+/**
+ * cron "7 14,20 * * *" ele_assest.js
+ */
+const $ = new Env('饿了么资产推送')
 const {
   sign,
   getToken,

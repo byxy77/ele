@@ -1,3 +1,7 @@
+/**
+ * cron "47 9,15 * * *" ele_elge.js
+ */
+const $ = new Env('饿了么饿了个饿')
 const {
   sign,
   getToken,

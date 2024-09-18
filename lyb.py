@@ -137,7 +137,7 @@ class LYB:
 
         try:
             r = requests.post(
-                "http://elm.iiliil.cn/getxsign?token=Aa123456",
+                "http://8.138.111.200:49888/api/getXSign",
                 json=body
             )
             r.raise_for_status()
