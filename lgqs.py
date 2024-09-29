@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-
+"""
+cron "57 11,17 * * *" 
+const $ = new Env('饿了么蓝光骑士')
+"""
 import hashlib
 import os
 import re

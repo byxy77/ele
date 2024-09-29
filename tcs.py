@@ -1,3 +1,7 @@
+"""
+cron "27 12,18 * * *" 
+const $ = new Env('饿了么贪吃蛇')
+"""
 import os
 import re
 import time

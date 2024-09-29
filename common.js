@@ -15,6 +15,7 @@ const signhost = process.env.signhost || "127.0.0.1:18848";
 const https = require("https");
 const cheerio = require("cheerio");
 const axios = require("axios");
+const moment = require("moment");
 
 function _0x5429db(_0x832f9f = 0, _0x1fce9d = 100) {
     return Math.min(Math.floor(_0x832f9f + Math.random() * (_0x1fce9d - _0x832f9f)), _0x1fce9d);
@@ -384,10 +385,12 @@ function _0x5a5a781(_0x10377c) {
     return _0x4c1408;
 }
 
+ 
 function _0x51769c(_0xfd158b = "elmck") {
     console["log"]("版本：内部9.9.9\n");
     let _0x48a24a = [];
     let _0x53f2af = process["env"][_0xfd158b];
+
     if (_0x53f2af) {
         if (_0x53f2af["indexOf"]('&') > -1) {
             _0x48a24a = _0x53f2af["split"]('&');
@@ -401,6 +404,7 @@ function _0x51769c(_0xfd158b = "elmck") {
     }
     return _0x48a24a;
 }
+ 
 
 const _0x5aea051 = async (cookie) => {
     let _0x3107f4 = _0x5a5a78(cookie),
@@ -738,6 +742,7 @@ async function checkCookieRetry(cookie, ztimes) {
     }
 }
 
+
 async function checkCookie(cookie) {
     const url = "https://waimai-guide.ele.me/h5/mtop.alsc.personal.queryminecenter/1.0/?jsv=2.6.2&appKey=12574478";
     const headers = {
@@ -760,27 +765,94 @@ async function checkCookie(cookie) {
             return null;
         }
     } catch (e) {
-            console.log("解析ck错误, 重试");
-            return checkCookieRetry(cookie, 0);
+        console.log("解析ck错误, 重试");
+        return checkCookieRetry(cookie, 0);
     }
 }
 
-async function _0x21a086(ck1, jonattan) {
+async function _0x21a086(ck1) {
     const ck = tq1(ck1);
     const deviceId = ck['deviceId'];
     const userId = ck['USERID'];
-    const token = ck['token'];
-    if (!token) {
-        return null;
-    }
+    let token = ck['token'] || "666";
     const umt = ck['umt'];
+
+    if (!umt) {
+        const msg = "未获取到umt，无法进行刷新";
+        return { msg, result: null };
+    }
+
     const data = {
         "ext": "{\"apiReferer\":\"{\\\\\\\"eventName\\\\\\\":\\\\\\\"SESSION_INVALID\\\\\\\"}\"}",
         'userId': userId,
         'tokenInfo': `{"appName":"24895413","appVersion":"android_11.1.38","deviceId":"${deviceId}","deviceName":"Android(AOSP on blueline)","locale":"zh_CN","sdkVersion":"android_5.3.3.4","site":25,"t":${Date.now()},"token":"${token}","ttid":"1608030065155@eleme_android_11.1.38","useAcitonType":true,"useDeviceToken":false,"utdid":""}`,
         'riskControlInfo': `{"appStore":"1608030065155@eleme_android_11.1.38","deviceBrand":"Google","deviceModel":"AOSP on blueline","deviceName":"AOSP on blueline","osName":"android","osVersion":"10","screenSize":"0x0","t":${Date.now()},"umidToken":"${umt}","wua":""}`
     };
-    return await resq(ck1, 'com.taobao.mtop.mloginunitservice.autologin', data)
+
+    const re = await resq(ck1, 'com.taobao.mtop.mloginunitservice.autologin', data);
+    
+    if (re !== null) {
+        const msg = "token版刷新成功";
+        return { msg, result: re };
+    } else {
+        const phone = ck['phone'];
+        const pwd = ck['pwd'];
+        if (!phone || !pwd || !umt) {
+            const msg = "token版刷新失败，也未获取到账密信息";
+            return { msg, result: null };
+        } else {
+            const yy = await zmpost(phone, pwd, umt);
+            return yy;
+        }
+    }
+}
+
+async function zmpost(phone, pwd, umt) {
+    try {
+        const currentTime = Date.now();
+        const data = {
+            ext: JSON.stringify({
+                alipayInstalled: "true",
+                apiVersion: "3.0",
+                deviceName: "23117RK66C",
+                mobileCheckSimilarity: "true",
+                scene: "recommendLogin",
+                sdkTraceId: "pwdLogin_ZtkZY2aofs4DACn50tk0KFZq_1726757849_PageNewPassportLogin"
+            }),
+            loginInfo: JSON.stringify({
+                appName: "24895413",
+                appVersion: "android_11.15.38",
+                locale: "zh_CN",
+                loginId: phone,
+                password: pwd,
+                pwdEncrypted: false,
+                sdkVersion: "android_11.15.38",
+                site: 25,
+                t: currentTime,
+                ttid: "1601274962374@eleme_android_11.15.38"
+            }),
+            riskControlInfo: JSON.stringify({
+                apdId: "eYOIkkIlUMm5G4Rgahc/bIq3Gy7POyKcyB92PfefQfy5OuhJHMVJTGLr",
+                deviceBrand: "Redmi",
+                deviceModel: "23117RK66C",
+                t: currentTime,
+                umidToken: umt
+            })
+        };
+        
+        const re = await resq("1", 'mtop.com.alsc.mloginservice.login', data);
+        
+        if (re !== null) {
+            const msg = "账密版刷新成功";
+            return { msg, result: re };
+        } else {
+            const msg = "账密版刷失败";
+            return { msg, result: null };
+        }
+    } catch (error) {
+        const msg = "账密版刷新失败";
+        return { msg, result: null };
+    }
 }
 
 

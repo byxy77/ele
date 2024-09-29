@@ -1,3 +1,7 @@
+"""
+cron "7 13,19 * * *" 
+const $ = new Env('饿了么跳一跳')
+"""
 import hashlib
 import os
 import re

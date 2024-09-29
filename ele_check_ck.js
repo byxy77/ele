@@ -27,6 +27,31 @@ function _0x543ec4(_0x3fdeea, _0x4dabab) {
     return Math.floor(Math.random() * (_0x4dabab - _0x3fdeea + 1) + _0x3fdeea);
 }
 
+function reorderCookie(s) {
+    const order = ["cookie2", "sgcookie", "unb", "USERID", "SID", "token", "utdid", "deviceId", "umt", "phone", "pwd"];
+    const cookies = s.split(';');
+    const cookieDict = {};
+
+    cookies.forEach(cookie => {
+        const keyValue = cookie.split('=', 2);
+        if (keyValue.length === 2) {
+            const key = keyValue[0].trim();
+            const value = keyValue[1].trim();
+            cookieDict[key] = value;
+        }
+    });
+
+    const reorderedCookies = [];
+
+    order.forEach(key => {
+        if (cookieDict.hasOwnProperty(key)) {
+            reorderedCookies.push(`${key}=${cookieDict[key]}`);
+        }
+    });
+
+    return reorderedCookies.join(';') + ';';
+}
+
 function _0x389941(_0x1daaab) {
     let _0x59299c = "";
 
@@ -38,40 +63,20 @@ function _0x389941(_0x1daaab) {
 }
 
 async function _0x179175(data, context, options) {
-    let responseData = await runOne(context, options);
+    let result1 = await runOne(context, options);
+    const msg = result1.msg;
+    const responseData = result1.result;
 
     if (responseData) {
         if (responseData.code === 3000) {
             let parsedData = JSON.parse(responseData.returnValue.data);
-            const cookies = parsedData.cookies;
-            let cookie2 = null;
-            let unb = null;
-            for (const cookie of cookies) {
-                const cookie2Match = cookie.match(/cookie2=([^;]+)/);
-                if (cookie2Match) {
-                    cookie2 = cookie2Match[1];
-                }
-                const unbMatch = cookie.match(/unb=([^;]+)/);
-                if (unbMatch) {
-                    unb = unbMatch[1];
-                }
-                if (cookie2 && unb) {
-                    break;
-                }
-            }
-
+            let token = parsedData.autoLoginToken;
+            let cookie2 = responseData.returnValue.sid;
+            let unb = responseData.returnValue.hid;
             const expiryTimestamp = parsedData.expires;
             const expiryDate = _0x11f78e(expiryTimestamp * 1000).format("YYYY-MM-DD HH:mm:ss");
 
             let cookieMap = getCookieMap(context);
-            let extraMap = JSON.parse(responseData.returnValue.extMap.eleExt);
-
-            for (let item of extraMap) {
-                if (item.name === "SID") {
-                    break;
-                }
-            }
-
             let updatedContext = await runOne(context, cookieMap.get("SID"));
 
             if (!updatedContext) {
@@ -79,8 +84,11 @@ async function _0x179175(data, context, options) {
             }
 
             cookieMap.set('cookie2', cookie2);
+            cookieMap.set('token', token);
+            cookieMap.set('unb', unb);
 
-            let updatedEnvironment = _0x389941(cookieMap);
+            let ck666 = _0x389941(cookieMap);
+            let updatedEnvironment = reorderCookie(ck666);
 
             if (data.id) {
                 await updateEnv11(updatedEnvironment, data.id, data.remarks);
@@ -91,10 +99,7 @@ async function _0x179175(data, context, options) {
             let userID = cookieMap.get("USERID");
             let userEnvironment = await getEnvByUserId(userID);
 
-            
-
-            let successMessage = "刷新成功: " + expiryDate;
-
+            let successMessage = `${msg}: ${expiryDate}`;
             console.log(successMessage);
             return successMessage;
         } else {
@@ -103,12 +108,12 @@ async function _0x179175(data, context, options) {
             } else {
                 console.log(response.ret[0]);
             }
-
             return null;
         }
+    } else {
+        console.log(msg);
     }
 }
-
 
 
 (async function _0x1f3fe2() {
@@ -136,14 +141,13 @@ async function _0x179175(data, context, options) {
                         await EnableCk(houda);
                         console.log("第", mackala + 1, "账号正常😁\n");
                     } else {
-                        // const lakeyah = await DisableCk(houda);
-                        // if (lakeyah.code === 200) {
-                        //     console.log("第", mackala + 1, "账号失效！已🈲用");
-                        // } else {
-                        //     console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
-                        // }
-                        // await invalidCookieNotify(athel, pragati[mackala].remarks);
-                        console.log("第", mackala + 1, "账号不正常，等待下次检测😁\n");
+                        const lakeyah = await DisableCk(houda);
+                        if (lakeyah.code === 200) {
+                            console.log("第", mackala + 1, "账号失效！已🈲用");
+                        } else {
+                            console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
+                        }
+                        await invalidCookieNotify(athel, pragati[mackala].remarks);
                     }
                 } else {
                     let amirr = await getUserInfo(athel);
@@ -153,13 +157,12 @@ async function _0x179175(data, context, options) {
                             await EnableCk(houda);
                             console.log("第", mackala + 1, "账号正常😁\n");
                         } else {
-                            // const jericca = await DisableCk(houda);
-                            // if (jericca.code === 200) {
-                            //     console.log("第", mackala + 1, "账号失效！已🈲用");
-                            // } else {
-                            //     console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
-                            // }
-                            console.log("第", mackala + 1, "账号不正常，等待下次检测😁\n");
+                            const jericca = await DisableCk(houda);
+                            if (jericca.code === 200) {
+                                console.log("第", mackala + 1, "账号失效！已🈲用");
+                            } else {
+                                console.log("第", mackala + 1, "账号失效！请重新登录！！！😭");
+                            }
                         }
                         await invalidCookieNotify(athel, pragati[mackala].remarks);
                     } else {

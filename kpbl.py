@@ -1,3 +1,7 @@
+"""
+cron "27 13,19 * * *" 
+const $ = new Env('饿了么卡皮巴拉')
+"""
 import json
 import logging
 import os
