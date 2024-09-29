@@ -1,9 +1,9 @@
 /**
- * 变量：elmck: 必填，账号cookie
- * cron "7 10,16 * * *" ele_femf.js
+ * 变量：elmck: 必填
+ * cron: 10 10 * * *
  */
 
-const $ = new Env('饿了么福尔魔方');
+const $ = new Env('饿了么_福尔魔方');
 const qs = require("qs");
 const request = require("request");
 
@@ -137,7 +137,16 @@ async function start() {
             try {
                 let _0x3b7f88 = await checkCk(_0x10e68c, _0x28bb82);
                 if (!_0x3b7f88) {
-                    continue;
+                    console.log("检查ck失败，重试一次");
+                    _0x3b7f88 = await checkCk(_0x10e68c, _0x28bb82);
+                        if (!_0x3b7f88) {
+                            console.log("检查ck失败，再重试一次");
+                            _0x3b7f88 = await checkCk(_0x10e68c, _0x28bb82);
+                            if (!_0x3b7f88) {
+                                console.log("检查ck失败");
+                                continue;
+                            }
+                        }
                 }
                 let _0x2d55f7 = await getUserInfo(_0x3b7f88);
                 if (!_0x2d55f7.encryptMobile) {

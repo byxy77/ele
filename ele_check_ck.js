@@ -1,7 +1,7 @@
 /**
  * cron "7 9,15 * * *" ele_check_ck.js
+ * const $ = new Env('饿了么CK')
  */
-const $ = new Env('饿了么CK')
 const {
     getEnvsByName,
     DisableCk,

@@ -707,6 +707,37 @@ function tq1(txt) {
     }
 }
 
+async function checkCookieRetry(cookie, ztimes) {
+    if (ztimes > 2) {
+        console.log("重试超过次数");
+        return null;
+    }
+    const url = "https://waimai-guide.ele.me/h5/mtop.alsc.personal.queryminecenter/1.0/?jsv=2.6.2&appKey=12574478";
+    const headers = {
+        "Cookie": cookie,
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.87 Safari/537.36"
+    };
+
+    try {
+        const response = await axios.get(url, { headers });
+        if (response.status === 200) {
+            const { '_m_h5_tk': token, '_m_h5_tk_enc': encToken } = response.headers['set-cookie'].reduce((acc, cookieStr) => {
+                const [name, value] = cookieStr.split(';')[0].split('=');
+                acc[name] = value;
+                return acc;
+            }, {});
+            const tokenCookie = `_m_h5_tk=${token}`;
+            const encTokenCookie = `_m_h5_tk_enc=${encToken}`;
+            return hbh5tk(tokenCookie, encTokenCookie, cookie);
+        } else {
+            return null;
+        }
+    } catch (e) {
+            console.log("解析ck错误, 重试");
+            return checkCookieRetry(cookie, ztimes+1);
+    }
+}
+
 async function checkCookie(cookie) {
     const url = "https://waimai-guide.ele.me/h5/mtop.alsc.personal.queryminecenter/1.0/?jsv=2.6.2&appKey=12574478";
     const headers = {
@@ -729,8 +760,8 @@ async function checkCookie(cookie) {
             return null;
         }
     } catch (e) {
-        console.log("解析ck错误");
-        return null;
+            console.log("解析ck错误, 重试");
+            return checkCookieRetry(cookie, 0);
     }
 }
 

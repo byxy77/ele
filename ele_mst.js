@@ -385,9 +385,18 @@ async function _0x51929f() {
         } else {
             try {
                 let _0xfe58ae = await checkCk(_0x4f239e, _0x3054fb);
-
+                
                 if (!_0xfe58ae) {
-                    continue;
+                    console.log("检查ck失败，重试一次");
+                    _0xfe58ae = await checkCk(_0x4f239e, _0x3054fb);
+                        if (!_0xfe58ae) {
+                            console.log("检查ck失败，再重试一次");
+                            _0xfe58ae = await checkCk(_0x4f239e, _0x3054fb);
+                            if (!_0xfe58ae) {
+                                console.log("检查ck失败");
+                                continue;
+                            }
+                        }
                 }
 
                 let _0x13aa44 = await getUserInfo(_0xfe58ae);

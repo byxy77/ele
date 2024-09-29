@@ -109,6 +109,32 @@ def md5(text):
     hash_md5.update(text.encode())
     return hash_md5.hexdigest()
 
+def check_cookie_retry(cookie, ztimes):
+    if ztimes > 2:
+        print("重试结束")
+        return null
+    url = "https://waimai-guide.ele.me/h5/mtop.alsc.personal.queryminecenter/1.0/?jsv=2.6.2&appKey=12574478"
+    headers = {
+        "Cookie": cookie,
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.87 Safari/537.36"
+    }
+    ztimes = ztimes + 1
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            cookie_jar = response.cookies
+            token = cookie_jar.get('_m_h5_tk', '')
+            token_cookie = "_m_h5_tk=" + token
+            enc_token = cookie_jar.get('_m_h5_tk_enc', '')
+            enc_token_cookie = "_m_h5_tk_enc=" + enc_token
+            cookie = hbh5tk(token_cookie, enc_token_cookie, cookie)
+            return cookie
+        else:
+            return check_cookie_retry(cookie, ztimes)
+    except Exception as e:
+        print("解析ck错误,再重试")
+        return check_cookie_retry(cookie, ztimes)
+
 
 def check_cookie(cookie):
     url = "https://waimai-guide.ele.me/h5/mtop.alsc.personal.queryminecenter/1.0/?jsv=2.6.2&appKey=12574478"
@@ -128,10 +154,10 @@ def check_cookie(cookie):
             cookie = hbh5tk(token_cookie, enc_token_cookie, cookie)
             return cookie
         else:
-            return None
+            return check_cookie_retry(cookie, 0)
     except Exception as e:
-        print("解析ck错误")
-        return None
+        print("解析ck错误,重试")
+        return check_cookie_retry(cookie, 0)
 
 
 class TCS:

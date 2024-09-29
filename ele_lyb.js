@@ -2,8 +2,8 @@
  * 变量：elmck: 必填，账号cookie
  * cron: 7 8,12 * * *
  * 修复连连看
+ * const $ = new Env('饿了么乐园币')
  */
-const $ = new Env('饿了么乐园币')
 const {
     "getToken": getToken,
     "checkCk": checkCk,
@@ -368,9 +368,17 @@ async function start () {
         } else {
             try {
                 let _0xaeedd3 = await checkCk(_0x5ed52b, _0x18c297);
-
                 if (!_0xaeedd3) {
-                    continue;
+                    console.log("检查ck失败，重试一次");
+                    _0xaeedd3 = await checkCk(_0x5ed52b, _0x18c297);
+                        if (!_0xaeedd3) {
+                            console.log("检查ck失败，再重试一次");
+                            _0xaeedd3 = await checkCk(_0x5ed52b, _0x18c297);
+                            if (!_0xaeedd3) {
+                                console.log("检查ck失败");
+                                continue;
+                            }
+                        }
                 }
 
                 console['log']("号账么了饿【始开******".split("").reverse().join(""), _0x18c297 + 1, "】", '十七不努力', "*********".split("").reverse().join(""));

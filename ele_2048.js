@@ -193,9 +193,17 @@ async function start() {
     } else {
       try {
         let _0x2d2586 = await checkCk(_0x508a28, _0x318f4b);
-
         if (!_0x2d2586) {
-          continue;
+            console.log("检查ck失败，重试一次");
+            _0x2d2586 = await checkCk(_0x508a28, _0x318f4b);
+                if (!_0x2d2586) {
+                    console.log("检查ck失败，再重试一次");
+                    _0x2d2586 = await checkCk(_0x508a28, _0x318f4b);
+                    if (!_0x2d2586) {
+                        console.log("检查ck失败");
+                        continue;
+                    }
+                }
         }
 
         let _0x687c66 = await getUserInfo(_0x2d2586);
